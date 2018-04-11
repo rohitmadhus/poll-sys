@@ -1,0 +1,58 @@
+.button1 {
+  background-color: #4CAF50; /* Green */
+  color: white;
+  width: 100px;
+  height: 150px;
+  border-radius: 5px;
+  border: 2px solid #4CAF50;
+  text-align: center;
+/*  padding: 10px; */
+
+  font-size: 28px;
+  margin: 10 px;
+  width: 200px;
+  transition: all 0.5s;
+  cursor: pointer;
+}
+.button1 span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.9s;
+}
+.button1 span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.button1:hover span {
+  padding-right: 20px;
+  transition: 0.5s;
+}
+
+.button1:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
+.font1 , .button1 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+   
+
+}
+
+.b1
+{
+	padding : 20px;
+	width: 100%;
+}
+.div1
+{
+	
+    width: 100px;
+}

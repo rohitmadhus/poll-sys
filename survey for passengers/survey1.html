@@ -1,0 +1,116 @@
+
+<html> 
+  <style type="text/css">
+    body {
+      background-image: url("bcg2.svg");
+      background-repeat: no-repeat;
+      background-size: auto;
+      background-attachment: fixed;
+      background-position: center;
+
+    }
+    .b2 {
+      width: 100%;
+    background-color: #f44336; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+     }
+     .font1
+     {
+      color: black;
+     }
+  </style>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="metrocss.css " rel="stylesheet" type="text/css" />
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+  </head>
+  <body >
+     <div class="container" id="app">
+        <div class="row">
+          <div class="col-sm-3" v-for="(item,key) in questions" :key="key">
+             <div id="but1" class="b1">
+              <div v-on:click="togglecounter(key)" class="button1" v-bind:style="{ 'background-image': 'url(' + item.imageURL + ')' }">
+                  <span class= "font1" >{{item.ques}}</span>
+                </div>
+             </div>
+          </div>
+      </div>
+      <div>
+        <button v-on:click="upload()" type="button" class="b2" >Submit</button>
+      </div>
+    </div>
+
+    <script>
+
+
+
+      //import image from "./bcg1.jpg"
+      let config = {
+          apiKey: "AIzaSyB49R6mJg3SeqBY4dEfKOmFprZi7Kw0d-g",
+          authDomain: "metroanalysis.firebaseapp.com",
+          databaseURL: "https://metroanalysis.firebaseio.com",
+          projectId: "metroanalysis",
+          storageBucket: "metroanalysis.appspot.com",
+          messagingSenderId: "648580434228"
+        };
+        
+      let app = firebase.initializeApp(config)
+      let db = app.database()
+      let quesRef = db.ref('questions')
+      var a = new Vue({
+        el: '#app',
+        data: {
+          questions: []
+        },
+        methods: {
+        	togglecounter: function (index) {
+        		if (this.questions[index].counter === 1) {
+        			this.questions[index].counter = 0
+        			this.questions[index].imageURL = './bg2.jpg'
+        		} else {
+                 this.questions[index].counter=1
+                 this.questions[index].imageURL = './bg1.jpg'
+        		}
+        	},
+          upload()
+          {
+            console.log('clicked')
+            db.ref('survey').push(this.questions).then(success => {
+              for(let a in this.questions) {
+                this.questions[a].counter = 0
+              }
+              alert('success')
+            })
+          }
+        },
+        mounted () {
+          var vm = this
+          quesRef.once('value', function(snapshot) {
+            vm.questions = []
+            snapshot.forEach(function(childSnapshot) {
+              var childKey = childSnapshot.key;
+              var childData = childSnapshot.val();
+              childData.counter = 0;
+              childData.imageURL = './bg2.jpg';
+              if(childData.type === 'passengers') {
+                vm.questions.push(childData)
+              }
+            });
+          });
+        }
+      })
+    </script>
+  </body>
+</html>
